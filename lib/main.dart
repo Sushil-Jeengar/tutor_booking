@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'find_tutors.dart';
-import 'categories.dart'; // Ensure this file exists and is configured properly
+import 'categories.dart';
+import 'about.dart';
+import 'contact.dart';// Ensure this file exists and is configured properly
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +19,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.orange),
       routes: {
         '/tutors': (context) => const FindTutorsPage(),
-        '/categories': (context) => const CategoriesPage(),  // ✅ Categories route added
+        '/categories': (context) => const CategoriesPage(),
+        '/about': (context) => const AboutPage(),
+        '/contact': (context) => ContactUsPage(), // ✅ Categories route added
         // Add routes for about, contact later
       },
       home: const HomePage(),
@@ -63,11 +67,13 @@ class HomePage extends StatelessWidget {
                     Navigator.pushNamed(context, '/categories');
                   }),
                   navButton(context, 'About', () {
-                    // Add navigation for about page later
+                    Navigator.pushNamed(context, '/about');
                   }),
+
                   navButton(context, 'Contact Us', () {
-                    // Add navigation for contact page later
-                  }),
+                    Navigator.pushNamed(context, '/contact');
+
+                    }),
                 ],
               ),
             ),
