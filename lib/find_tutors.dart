@@ -7,17 +7,7 @@ class FindTutorsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF7ED),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: const [
-            Icon(Icons.menu_book, color: Colors.orange),
-            SizedBox(width: 8),
-            Text('MediaCityTutorBooking', style: TextStyle(color: Colors.orange)),
-          ],
-        ),
-      ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
