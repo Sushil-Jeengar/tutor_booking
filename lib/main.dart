@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'find_tutors.dart';
 import 'categories.dart';
-import 'sign_in.dart';
-import 'sign_up.dart';
 import 'profile.dart';
 import 'splash_screen.dart';
+import 'otp_login.dart'; // New OTP login screen
 
 void main() {
   runApp(const MyApp());

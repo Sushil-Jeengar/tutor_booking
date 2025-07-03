@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
+import 'otp_login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,10 +13,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const BottomNavWrapper()),
+        MaterialPageRoute(builder: (context) => const OtpLoginScreen()),
       );
     });
   }
@@ -24,19 +24,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7ED),
+      backgroundColor: Colors.orange,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            Icon(Icons.menu_book, size: 100, color: Colors.orange),
+            Icon(Icons.menu_book, size: 80, color: Colors.white),
             SizedBox(height: 20),
             Text(
               'MediaCityTutorBooking',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.orange),
+              style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-            CircularProgressIndicator(color: Colors.orange),
+            CircularProgressIndicator(color: Colors.white),
           ],
         ),
       ),
