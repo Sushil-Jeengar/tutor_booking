@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'find_tutors.dart';
 import 'categories.dart';
-import 'about.dart';
-import 'contact.dart';
+import 'sign_in.dart';
+import 'sign_up.dart';
+import 'profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,24 +37,13 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
     const HomePage(),
     const FindTutorsPage(),
     const CategoriesPage(),
+    const ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  void _handleMenuSelection(String choice) {
-    if (choice == 'Sign In') {
-      // Add Sign In navigation logic
-    } else if (choice == 'Sign Up') {
-      // Add Sign Up navigation logic
-    } else if (choice == 'About') {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const AboutPage()));
-    } else if (choice == 'Contact Us') {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ContactUsPage()));
-    }
   }
 
   @override
@@ -64,23 +54,10 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Row(
-          children: [
-            const Icon(Icons.menu_book, color: Colors.orange),
-            const SizedBox(width: 8),
-            const Text('MediaCityTutorBooking', style: TextStyle(color: Colors.orange)),
-            const Spacer(),
-            PopupMenuButton<String>(
-              icon: const Icon(Icons.person, color: Colors.orange),
-              onSelected: _handleMenuSelection,
-              itemBuilder: (BuildContext context) {
-                return ['Sign In', 'Sign Up', 'About', 'Contact Us'].map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              },
-            )
+          children: const [
+            Icon(Icons.menu_book, color: Colors.orange),
+            SizedBox(width: 8),
+            Text('MediaCityTutorBooking', style: TextStyle(color: Colors.orange)),
           ],
         ),
       ),
@@ -88,11 +65,15 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.orange,
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.white,
         onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Tutors'),
           BottomNavigationBarItem(icon: Icon(Icons.category), label: 'Categories'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );
@@ -124,7 +105,6 @@ class HomePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-
             RichText(
               text: const TextSpan(
                 text: 'Find Your ',
@@ -136,13 +116,11 @@ class HomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-
             Text(
               'Connect with world-class tutors who will transform your learning journey. Start achieving your goals today!',
               style: TextStyle(fontSize: 16, color: Colors.grey[700]),
             ),
             const SizedBox(height: 20),
-
             LayoutBuilder(
               builder: (context, constraints) {
                 if (constraints.maxWidth > 600) {
@@ -178,7 +156,6 @@ class HomePage extends StatelessWidget {
               },
             ),
             const SizedBox(height: 20),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -188,7 +165,6 @@ class HomePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-
             Column(
               children: [
                 featureCard(Icons.video_library, 'Video Lessons', 'HD Quality'),
@@ -208,8 +184,8 @@ class HomePage extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        filled: true,
         fillColor: Colors.white,
+        filled: true,
       ),
     );
   }
