@@ -4,6 +4,7 @@ import 'categories.dart';
 import 'sign_in.dart';
 import 'sign_up.dart';
 import 'profile.dart';
+import 'splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Tutor Booking App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.orange),
-      home: const BottomNavWrapper(),
+      home: const SplashScreen(),
     );
   }
 }
@@ -57,7 +58,13 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
           children: const [
             Icon(Icons.menu_book, color: Colors.orange),
             SizedBox(width: 8),
-            Text('MediaCityTutorBooking', style: TextStyle(color: Colors.orange)),
+            Expanded(
+              child: Text(
+                'MediaCityTutorBooking',
+                style: TextStyle(color: Colors.orange),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ],
         ),
       ),
