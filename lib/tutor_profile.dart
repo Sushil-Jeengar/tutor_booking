@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'booking_page.dart';
 
 class TutorProfilePage extends StatelessWidget {
   final String name;
@@ -36,7 +37,6 @@ class TutorProfilePage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text('Tutor Profile', style: TextStyle(color: Colors.orange)),
-        iconTheme: const IconThemeData(color: Colors.orange),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -46,8 +46,7 @@ class TutorProfilePage extends StatelessWidget {
 
             // Header Section
             Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              elevation: 4,
+              elevation: 3,
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Row(
@@ -62,16 +61,14 @@ class TutorProfilePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 4),
+                          Text(name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                           Text(title, style: const TextStyle(color: Colors.grey)),
                           const SizedBox(height: 8),
                           Row(
                             children: [
-                              const Icon(Icons.star, size: 18, color: Colors.orange),
+                              const Icon(Icons.star, size: 16, color: Colors.orange),
                               const SizedBox(width: 4),
-                              Text('$rating', style: const TextStyle(fontWeight: FontWeight.bold)),
-                              Text(' ($reviews reviews)', style: const TextStyle(color: Colors.grey)),
+                              Text('$rating ($reviews reviews)'),
                             ],
                           ),
                         ],
@@ -84,16 +81,18 @@ class TutorProfilePage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // About Me Section
-            sectionTitle('About Me'),
-            sectionCard(Text(about, style: const TextStyle(fontSize: 16, color: Colors.black87))),
+            // About Me
+            const Text('About Me', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Text(about, style: const TextStyle(color: Colors.grey)),
             const SizedBox(height: 20),
 
             // Specialties
-            sectionTitle('Specialties'),
+            const Text('Specialties', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: 6,
+              runSpacing: 6,
               children: specialties.map((topic) {
                 return Chip(
                   label: Text(topic),
@@ -104,10 +103,11 @@ class TutorProfilePage extends StatelessWidget {
             const SizedBox(height: 20),
 
             // Languages
-            sectionTitle('Languages'),
+            const Text('Languages', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: 6,
+              runSpacing: 6,
               children: languages.map((lang) {
                 return Chip(
                   label: Text(lang),
@@ -118,40 +118,28 @@ class TutorProfilePage extends StatelessWidget {
             const SizedBox(height: 20),
 
             // Achievements
-            sectionTitle('Achievements & Qualifications'),
-            sectionCard(
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: achievements.map((achieve) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.check_circle, color: Colors.orange, size: 20),
-                        const SizedBox(width: 8),
-                        Expanded(child: Text(achieve)),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
+            const Text('Achievements & Qualifications', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Column(
+              children: achievements.map((achieve) {
+                return ListTile(
+                  leading: const Icon(Icons.check_circle, color: Colors.orange),
+                  title: Text(achieve),
+                );
+              }).toList(),
             ),
 
             const SizedBox(height: 20),
 
             // Student Reviews
-            sectionTitle('Student Reviews'),
+            const Text('Student Reviews', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
             Column(
               children: reviewsList.map((review) {
                 return Card(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  elevation: 2,
                   margin: const EdgeInsets.symmetric(vertical: 6),
                   child: ListTile(
-                    leading: const CircleAvatar(
-                      backgroundColor: Colors.orange,
-                      child: Icon(Icons.person, color: Colors.white),
-                    ),
+                    leading: const Icon(Icons.person, color: Colors.orange),
                     title: Text(review['name']!),
                     subtitle: Text(review['comment']!),
                     trailing: Row(
@@ -170,46 +158,33 @@ class TutorProfilePage extends StatelessWidget {
               }).toList(),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
 
             // Book Session Button
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.calendar_today),
-                label: const Text('Book Session'),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BookingPage(
+                        tutorName: name,
+                        subject: subject,
+                        price: price,
+                      ),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  textStyle: const TextStyle(fontSize: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
+                child: const Text('Book Session'),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // Reusable Title
-  Widget sectionTitle(String text) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-    );
-  }
-
-  // Reusable Card Wrapper
-  Widget sectionCard(Widget child) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 3,
-      margin: const EdgeInsets.only(top: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: child,
       ),
     );
   }

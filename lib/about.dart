@@ -114,10 +114,10 @@ class AboutPage extends StatelessWidget {
                 spacing: 20,
                 runSpacing: 20,
                 children: [
-                  valueCard(Icons.track_changes, 'Excellence', 'We strive for the highest quality in everything we do, from tutor selection to platform features.'),
-                  valueCard(Icons.favorite, 'Passion', 'We\'re passionate about education and believe in the transformative power of learning.'),
-                  valueCard(Icons.shield, 'Trust', 'We build trust through transparency, safety measures, and reliable service delivery.'),
-                  valueCard(Icons.language, 'Accessibility', 'We make quality education accessible to learners everywhere, breaking down barriers.'),
+                  valueCard(Icons.track_changes, 'Excellence', 'We strive for the highest quality in everything we do, from tutor selection to platform features.', context),
+                  valueCard(Icons.favorite, 'Passion', 'We\'re passionate about education and believe in the transformative power of learning.', context),
+                  valueCard(Icons.shield, 'Trust', 'We build trust through transparency, safety measures, and reliable service delivery.', context),
+                  valueCard(Icons.language, 'Accessibility', 'We make quality education accessible to learners everywhere, breaking down barriers.', context),
                 ],
               ),
             ),
@@ -184,10 +184,14 @@ class AboutPage extends StatelessWidget {
     );
   }
 
-  Widget valueCard(IconData icon, String title, String description) {
+  Widget valueCard(IconData icon, String title, String description, BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double cardWidth = screenWidth > 600 ? (screenWidth / 2) - 40 : (screenWidth / 2) - 30;
+
     return SizedBox(
-      width: 160,
+      width: cardWidth,
       child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
