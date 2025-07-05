@@ -1,13 +1,51 @@
 import 'package:flutter/material.dart';
+import 'tutor_profile.dart'; // Replace with your actual profile page file name
 
 class FindTutorsPage extends StatelessWidget {
   const FindTutorsPage({super.key});
+
+  final List<Map<String, dynamic>> tutors = const [
+    {
+      'name': 'John Doe',
+      'subject': 'Mathematics',
+      'rating': 4.8,
+      'price': 35.0,
+      'topics': ['Algebra', 'Geometry', 'Calculus'],
+    },
+    {
+      'name': 'Emily Smith',
+      'subject': 'Physics',
+      'rating': 4.6,
+      'price': 40.0,
+      'topics': ['Mechanics', 'Thermodynamics', 'Optics'],
+    },
+    {
+      'name': 'David Johnson',
+      'subject': 'Chemistry',
+      'rating': 4.7,
+      'price': 38.0,
+      'topics': ['Organic', 'Inorganic', 'Physical'],
+    },
+    {
+      'name': 'Sarah Lee',
+      'subject': 'English',
+      'rating': 4.9,
+      'price': 30.0,
+      'topics': ['Grammar', 'Writing', 'Literature'],
+    },
+    {
+      'name': 'Michael Brown',
+      'subject': 'Computer Science',
+      'rating': 4.5,
+      'price': 45.0,
+      'topics': ['Python', 'Data Structures', 'Algorithms'],
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF7ED),
-
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -31,7 +69,6 @@ class FindTutorsPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Search Bar
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Search by subject or tutor name...',
@@ -43,18 +80,19 @@ class FindTutorsPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Tutor List
               ListView.builder(
-                itemCount: 5,
+                itemCount: tutors.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
+                  final tutor = tutors[index];
                   return tutorCard(
-                    name: 'John Doe',
-                    subject: 'Mathematics',
-                    rating: 4.8,
-                    price: 35,
-                    topics: ['Algebra', 'Geometry', 'Calculus'],
+                    context: context,
+                    name: tutor['name'],
+                    subject: tutor['subject'],
+                    rating: tutor['rating'],
+                    price: tutor['price'],
+                    topics: List<String>.from(tutor['topics']),
                   );
                 },
               ),
@@ -66,6 +104,7 @@ class FindTutorsPage extends StatelessWidget {
   }
 
   Widget tutorCard({
+    required BuildContext context,
     required String name,
     required String subject,
     required double rating,
@@ -86,7 +125,6 @@ class FindTutorsPage extends StatelessWidget {
             Text('by $name', style: const TextStyle(color: Colors.grey)),
             const SizedBox(height: 8),
 
-            // Ratings and Price
             Row(
               children: [
                 const Icon(Icons.star, size: 16, color: Colors.orange),
@@ -99,7 +137,6 @@ class FindTutorsPage extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            // Topics
             Wrap(
               spacing: 6,
               runSpacing: 6,
@@ -116,7 +153,36 @@ class FindTutorsPage extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TutorProfilePage(
+                        name: name,
+                        title: '$subject Expert',
+                        subject: subject,
+                        rating: rating,
+                        reviews: 100, // You can adjust this as needed
+                        price: price,
+                        about: 'Passionate about teaching $subject with interactive methods.',
+                        specialties: topics,
+                        languages: ['English'],
+                        achievements: [
+                          'Certified $subject Tutor',
+                          '5+ years of teaching experience',
+                          'Fluent in English',
+                        ],
+                        reviewsList: [
+                          {
+                            'name': 'Student A',
+                            'comment': '$name is an excellent tutor!',
+                            'rating': '5',
+                          },
+                        ],
+                      ),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
                 child: const Text('View Profile'),
               ),
