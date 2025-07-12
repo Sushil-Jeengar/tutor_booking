@@ -155,8 +155,14 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
 
   final List<Map<String, dynamic>> testimonials = const [
     {
@@ -270,6 +276,31 @@ class HomePage extends StatelessWidget {
     String distance,
   ) {
     final isOnline = status == 'Online';
+    final tutor = {
+      'name': name,
+      'subject': subject,
+      'rating': rating,
+      'price': price,
+      'topics': [subject], // Using subject as a topic for consistency
+    };
+    final isWishlisted = WishlistManager().wishlistTutors.any((t) => t['name'] == name && t['subject'] == subject);
+    
+    void toggleWishlist() {
+      setState(() {
+        if (isWishlisted) {
+          WishlistManager().removeTutor(tutor);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Removed from wishlist'), duration: Duration(seconds: 1)),
+          );
+        } else {
+          WishlistManager().addTutor(tutor);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Added to wishlist'), duration: Duration(seconds: 1)),
+          );
+        }
+      });
+    }
+    
     return Container(
       width: 270,
       margin: const EdgeInsets.only(right: 20),
@@ -302,8 +333,11 @@ class HomePage extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
-                      icon: const Icon(Icons.favorite_border, color: Color(0xFF9CA3AF)),
-                      onPressed: () {},
+                      icon: Icon(
+                        isWishlisted ? Icons.favorite : Icons.favorite_border,
+                        color: isWishlisted ? Colors.orange : const Color(0xFF9CA3AF),
+                      ),
+                      onPressed: toggleWishlist,
                       iconSize: 22,
                       padding: EdgeInsets.zero,
                     ),
@@ -937,7 +971,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class FeaturedTutorCard extends StatelessWidget {
+class FeaturedTutorCard extends StatefulWidget {
   final String name;
   final String specialty;
   final String badge;
@@ -964,11 +998,43 @@ class FeaturedTutorCard extends StatelessWidget {
   });
 
   @override
+  State<FeaturedTutorCard> createState() => _FeaturedTutorCardState();
+}
+
+class _FeaturedTutorCardState extends State<FeaturedTutorCard> {
+
+  @override
   Widget build(BuildContext context) {
     const vibrantPurple = Color(0xFFB16CEA);
     const lightPurple = Color(0xFFD1B3FF);
     const gradientStart = Color(0xFFB16CEA);
     const gradientEnd = Color(0xFFFF5E69);
+    
+    final tutor = {
+      'name': widget.name,
+      'subject': widget.specialty,
+      'rating': widget.rating,
+      'price': double.tryParse(widget.price) ?? 0.0,
+      'topics': [widget.specialty],
+    };
+    final isWishlisted = WishlistManager().wishlistTutors.any((t) => t['name'] == widget.name && t['subject'] == widget.specialty);
+    
+    void toggleWishlist() {
+      setState(() {
+        if (isWishlisted) {
+          WishlistManager().removeTutor(tutor);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Removed from wishlist'), duration: Duration(seconds: 1)),
+          );
+        } else {
+          WishlistManager().addTutor(tutor);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Added to wishlist'), duration: Duration(seconds: 1)),
+          );
+        }
+      });
+    }
+    
     return Container(
       width: 320,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -1022,7 +1088,7 @@ class FeaturedTutorCard extends StatelessWidget {
                     ),
                   ),
                                   Text(
-                    name,
+                    widget.name,
                                     style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 20,
@@ -1031,7 +1097,7 @@ class FeaturedTutorCard extends StatelessWidget {
                                   ),
                   const SizedBox(height: 2),
                                   Text(
-                    specialty,
+                    widget.specialty,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -1045,7 +1111,7 @@ class FeaturedTutorCard extends StatelessWidget {
                       ...List.generate(5, (i) => Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 1),
                         child: Icon(
-                          i < rating.round()
+                          i < widget.rating.round()
                               ? Icons.star
                               : Icons.star_border,
                           color: Colors.amber,
@@ -1054,11 +1120,11 @@ class FeaturedTutorCard extends StatelessWidget {
                       )),
                                       const SizedBox(width: 4),
                       Text(
-                        rating.toStringAsFixed(1),
+                        widget.rating.toStringAsFixed(1),
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black),
                                   ),
                       const SizedBox(width: 2),
-                      Text('($reviews reviews)', style: const TextStyle(color: Colors.black87, fontSize: 12)),
+                      Text('(${widget.reviews} reviews)', style: const TextStyle(color: Colors.black87, fontSize: 12)),
                           ],
                         ),
                         const SizedBox(height: 12),
@@ -1076,7 +1142,7 @@ class FeaturedTutorCard extends StatelessWidget {
                         child: Column(
                           children: [
                                 Text(
-                              students,
+                              widget.students,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                 fontSize: 17,
@@ -1099,7 +1165,7 @@ class FeaturedTutorCard extends StatelessWidget {
                         child: Column(
                           children: [
                                 Text(
-                              '\$${price.toStringAsFixed(0)}',
+                              '\$${widget.price}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                 fontSize: 17,
@@ -1117,7 +1183,7 @@ class FeaturedTutorCard extends StatelessWidget {
                   Column(
                           children: [
                       OutlinedButton(
-                        onPressed: onBook,
+                        onPressed: widget.onBook,
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.white,
                           side: const BorderSide(color: vibrantPurple, width: 2),
@@ -1165,7 +1231,7 @@ class FeaturedTutorCard extends StatelessWidget {
                           ],
                         ),
                         child: ElevatedButton(
-                          onPressed: onProfile,
+                          onPressed: widget.onProfile,
                                 style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             shadowColor: Colors.transparent,
@@ -1200,9 +1266,9 @@ class FeaturedTutorCard extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
               decoration: BoxDecoration(
-                color: badgeType == 'PhD MIT'
+                color: widget.badgeType == 'PhD MIT'
                     ? vibrantPurple.withOpacity(0.92)
-                    : badgeType == 'Top Seller'
+                    : widget.badgeType == 'Top Seller'
                         ? gradientEnd.withOpacity(0.92)
                         : const Color(0xFF6DD5FA),
                 borderRadius: BorderRadius.circular(16),
@@ -1215,8 +1281,36 @@ class FeaturedTutorCard extends StatelessWidget {
           ],
         ),
               child: Text(
-                badge,
+                widget.badge,
                 style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14, letterSpacing: 0.2),
+              ),
+            ),
+          ),
+          // Wishlist icon
+          Positioned(
+            top: 10,
+            left: 16,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: IconButton(
+                icon: Icon(
+                  isWishlisted ? Icons.favorite : Icons.favorite_border,
+                  color: isWishlisted ? Colors.red : Colors.grey,
+                  size: 20,
+                ),
+                onPressed: toggleWishlist,
+                iconSize: 20,
+                padding: const EdgeInsets.all(8),
               ),
             ),
           ),
