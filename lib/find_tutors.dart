@@ -780,11 +780,12 @@ class _FilterPanelState extends State<FilterPanel> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Filters', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                     IconButton(
-                      icon: const Icon(Icons.close),
+                      icon: const Icon(Icons.arrow_back),
                       onPressed: () => Navigator.pop(context),
                     ),
+                    const Text('Filters', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                    const SizedBox(width: 48), // To balance the layout
                   ],
                 ),
                 const SizedBox(height: 18),
