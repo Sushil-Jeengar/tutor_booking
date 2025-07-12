@@ -7,6 +7,7 @@ import 'booking_page.dart';
 import 'otp_login.dart';
 import 'tutor_profile.dart';
 import 'wishlist_page.dart';
+import 'wishlist_manager.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,6 +36,7 @@ class BottomNavWrapper extends StatefulWidget {
 
 class _BottomNavWrapperState extends State<BottomNavWrapper> {
   int _selectedIndex = 0;
+  final WishlistManager _wishlistManager = WishlistManager();
 
   final List<Widget> _pages = [
     const HomePage(),
@@ -42,6 +44,24 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
     const CategoriesPage(),
     const ProfilePage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _wishlistManager.addListener(_onWishlistChanged);
+  }
+
+  @override
+  void dispose() {
+    _wishlistManager.removeListener(_onWishlistChanged);
+    super.dispose();
+  }
+
+  void _onWishlistChanged() {
+    setState(() {
+      // Trigger rebuild when wishlist changes
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -66,14 +86,43 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
               )
             : const Icon(Icons.menu_book, color: Colors.orange),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.favorite, color: Colors.orange),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const WishlistPage()),
-              );
-            },
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.favorite, color: Colors.orange),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const WishlistPage()),
+                  );
+                },
+              ),
+              if (_wishlistManager.wishlistCount > 0)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      '${_wishlistManager.wishlistCount}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
           ),
 
           IconButton(
