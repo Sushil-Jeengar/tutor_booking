@@ -38,6 +38,15 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
   int _selectedIndex = 0;
   final WishlistManager _wishlistManager = WishlistManager();
 
+  String _selectedLocation = 'New York, NY';
+  final List<String> _locations = [
+    'New York, NY',
+    'San Francisco, CA',
+    'London, UK',
+    'Delhi, India',
+    'Tokyo, Japan',
+  ];
+
   final List<Widget> _pages = [
     const HomePage(),
     const FindTutorsPage(),
@@ -81,11 +90,67 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
                 children: const [
                   Icon(Icons.menu_book, color: Colors.orange),
                   SizedBox(width: 8),
-
                 ],
               )
             : const Icon(Icons.menu_book, color: Colors.orange),
         actions: [
+          // Location Icon
+          IconButton(
+            icon: const Icon(Icons.location_on, color: Colors.orange),
+            onPressed: () async {
+              String tempLocation = _selectedLocation;
+              String? newLocation = await showDialog<String>(
+                context: context,
+                builder: (context) {
+                  return StatefulBuilder(
+                    builder: (context, setStateDialog) {
+                      return AlertDialog(
+                        title: const Text('Select Location'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ..._locations.map((loc) => RadioListTile<String>(
+                                  title: Text(loc),
+                                  value: loc,
+                                  groupValue: tempLocation,
+                                  onChanged: (value) {
+                                    setStateDialog(() {
+                                      tempLocation = value!;
+                                    });
+                                  },
+                                )),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Cancel'),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                            onPressed: () {
+                              Navigator.pop(context, tempLocation);
+                            },
+                            child: const Text('Save'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              );
+              if (newLocation != null && newLocation != _selectedLocation) {
+                setState(() {
+                  _selectedLocation = newLocation;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Location set to $_selectedLocation')),
+                );
+              }
+            },
+            tooltip: 'Change Location',
+          ),
+          // Wishlist Icon
           Stack(
             children: [
               IconButton(
@@ -124,7 +189,7 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
                 ),
             ],
           ),
-
+          // Notification Icon
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.orange),
             onPressed: () {
