@@ -68,88 +68,87 @@ class ProfilePage extends StatelessWidget {
             const SizedBox(height: 10),
 
             // Language Change
-            // Card(
-            //   margin: const EdgeInsets.symmetric(horizontal: 40),
-            //   child: ListTile(
-            //     leading: const Icon(Icons.language, color: Colors.orange),
-            //     title: const Text('Change Language'),
-            //     onTap: () {
-            //       _showLanguageDialog(context);
-            //     },
-            //   ),
-            // ),
+            Card(
+              margin: const EdgeInsets.symmetric(horizontal: 40),
+              child: ListTile(
+                leading: const Icon(Icons.language, color: Colors.orange),
+                title: const Text('Change Language'),
+                onTap: () {
+                  _showLanguageDialog(context);
+                },
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  // void _showLanguageDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       String selectedLanguage = 'English';
-  //
-  //       return AlertDialog(
-  //         title: const Text('Select Language'),
-  //         content: StatefulBuilder(
-  //           builder: (context, setState) {
-  //             return Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 RadioListTile<String>(
-  //                   title: const Text('English'),
-  //                   value: 'English',
-  //                   groupValue: selectedLanguage,
-  //                   onChanged: (value) {
-  //                     setState(() {
-  //                       selectedLanguage = value!;
-  //                     });
-  //                   },
-  //                 ),
-  //                 RadioListTile<String>(
-  //                   title: const Text('Hindi'),
-  //                   value: 'Hindi',
-  //                   groupValue: selectedLanguage,
-  //                   onChanged: (value) {
-  //                     setState(() {
-  //                       selectedLanguage = value!;
-  //                     });
-  //                   },
-  //                 ),
-  //                 RadioListTile<String>(
-  //                   title: const Text('Spanish'),
-  //                   value: 'Spanish',
-  //                   groupValue: selectedLanguage,
-  //                   onChanged: (value) {
-  //                     setState(() {
-  //                       selectedLanguage = value!;
-  //                     });
-  //                   },
-  //                 ),
-  //               ],
-  //             );
-  //           },
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () => Navigator.pop(context),
-  //             child: const Text('Cancel'),
-  //           ),
-  //           ElevatedButton(
-  //             style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-  //             onPressed: () {
-  //               // You can save selectedLanguage to shared preferences or state management
-  //               Navigator.pop(context);
-  //               ScaffoldMessenger.of(context).showSnackBar(
-  //                 SnackBar(content: Text('Language set to $selectedLanguage')),
-  //               );
-  //             },
-  //             child: const Text('Save'),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  void _showLanguageDialog(BuildContext context) {
+    String selectedLanguage = 'English';
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Select Language'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RadioListTile<String>(
+                    title: const Text('English'),
+                    value: 'English',
+                    groupValue: selectedLanguage,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLanguage = value!;
+                      });
+                    },
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('Hindi'),
+                    value: 'Hindi',
+                    groupValue: selectedLanguage,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLanguage = value!;
+                      });
+                    },
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('Spanish'),
+                    value: 'Spanish',
+                    groupValue: selectedLanguage,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLanguage = value!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                  onPressed: () {
+                    // You can save selectedLanguage to shared preferences or state management
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Language set to $selectedLanguage')),
+                    );
+                  },
+                  child: const Text('Save'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 }
